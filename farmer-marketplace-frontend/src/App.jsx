@@ -8,6 +8,8 @@ import Header from './components/Header';
 import CustomerDashboard from './pages/CustomerDashboard';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
+import SearchResults from './pages/SearchResults';
+import ProductDetail from './pages/ProductDetail';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/edit-product/:id" element={<EditProduct />} />
+        <Route path="/search-results" element={<SearchResults />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
     </Router>
   );
