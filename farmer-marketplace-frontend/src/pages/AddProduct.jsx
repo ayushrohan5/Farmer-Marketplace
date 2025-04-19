@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const AddProduct = () => {
   const [name, setProductName] = useState('');
   const [price, setPrice] = useState('');
   const [stock, setStock] = useState('');
+  const [weight, setWeight] = useState('');
   const [description, setDescription] = useState('');
   const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [existingProducts, setExistingProducts] = useState([]);
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
 
@@ -46,7 +50,7 @@ const AddProduct = () => {
     try {
       const response = await axios.post(
         'http://localhost:5000/api/farmer/add-product',
-        { name, price, stock, description, image, category, location },
+        { name, price, stock, weight, description, image, category, location },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -57,15 +61,20 @@ const AddProduct = () => {
       setProductName('');
       setPrice('');
       setStock('');
+      setWeight('');
       setDescription('');
       setImage('');
       setCategory('');
       setLocation('');
+      setTimeout(() => {
+        navigate('/farmer-dashboard');
+      }, 1500);
     } catch (err) {
       console.error('Error adding product:', err);
       toast.error('❌ Failed to add product.');
     }
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4">
@@ -99,6 +108,16 @@ const AddProduct = () => {
                 type="number"
                 value={stock}
                 onChange={(e) => setStock(e.target.value)}
+                className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Weight</label>
+              <input
+                type="text"
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
                 className="w-full p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
                 required
               />

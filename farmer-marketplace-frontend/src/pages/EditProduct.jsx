@@ -10,6 +10,7 @@ const EditProduct = () => {
     name: '',
     price: '',
     stock: '',
+    weight: '',
     image: '',
     category: '',
     location: '',
@@ -83,6 +84,15 @@ const EditProduct = () => {
             onChange={handleChange}
             required
             placeholder="Stock"
+            className="p-3 border rounded-lg w-full"
+          />
+          <input
+            type="text"
+            name="weight"
+            value={form.weight}
+            onChange={handleChange}
+            required
+            placeholder="Weight"
             className="p-3 border rounded-lg w-full"
           />
           <input

@@ -20,6 +20,9 @@ const ProductCard = ({ product }) => {
       <div className="mt-2">
         <span className="text-sm font-semibold text-green-700">₹ {product.price}</span>
       </div>
+      <div className="text-sm text-gray-700 mt-1">
+        {product.weight}
+      </div>
     </motion.div>
   );
 };

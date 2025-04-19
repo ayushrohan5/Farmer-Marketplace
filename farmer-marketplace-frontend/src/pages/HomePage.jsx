@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import HeroSection from '../components/HeroSection';
+import ProductList from '../components/ProductList';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -31,14 +32,8 @@ const HomePage = () => {
       <HeroSection />
 
       {token && role === 'consumer' && (
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-green-700 mb-4">🌾 Featured Products</h1>
-          <div className="flex flex-wrap gap-2" id ="shopping">
-            {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </div>
+        <ProductList products={products} />
+        
       )}
     </>
   );
