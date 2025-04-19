@@ -10,15 +10,15 @@ const getAllProducts = async (req, res) => {
 };
 
 const searchProducts = async (req, res) => {
+  const query = req.query.q;
+  if (!query) return res.status(400).json({ message: "Search query missing" });
+
   try {
-    const query = req.query.q;
-    if (!query) return res.json([]);
-    
-    const regex = new RegExp(query, 'i');
-    const products = await Product.find({ name: regex }).limit(10);
-    res.json(products);
+    const regex = new RegExp(query, 'i'); // case-insensitive search
+    const products = await Product.find({ name: regex });
+    res.json({ products });
   } catch (err) {
-    res.status(500).json({ error: 'Search failed' });
+    res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
 
