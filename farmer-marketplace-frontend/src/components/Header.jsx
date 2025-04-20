@@ -116,6 +116,7 @@ const Header = () => {
 
         {token && role ? (
           <>
+          <Link to="/aboutus" className="hover:underline">About us</Link>
             <Link
               to={role === 'farmer' ? '/farmer-dashboard' : '/customer-dashboard'}
               className="hover:underline"
@@ -131,6 +132,7 @@ const Header = () => {
           </>
         ) : (
           <>
+           <Link to="/aboutus" className="hover:underline">About us</Link>
             <Link to="/login" className="hover:underline">Login</Link>
             <Link to="/register" className="hover:underline">Register</Link>
           </>

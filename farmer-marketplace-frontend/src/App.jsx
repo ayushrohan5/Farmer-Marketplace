@@ -10,6 +10,7 @@ import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import SearchResults from './pages/SearchResults';
 import ProductDetail from './pages/ProductDetail';
+import AboutUs from './pages/AboutUs';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/search-results" element={<SearchResults />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/aboutus" element={<AboutUs />} />
       </Routes>
     </Router>
   );

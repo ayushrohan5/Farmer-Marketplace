@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@keyframes backgroundAnimation {
+    0% {
+      background-color: #f0fdf4; /* light green */
+    }
+    100% {
+      background-color: #d1fae5; /* lighter green */
+    }
+  }
+  

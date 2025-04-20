@@ -3,6 +3,7 @@ import axios from 'axios';
 import ProductCard from '../components/ProductCard';
 import HeroSection from '../components/HeroSection';
 import ProductList from '../components/ProductList';
+import Testimonials from '../components/Testimonials';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -35,6 +36,7 @@ const HomePage = () => {
         <ProductList products={products} />
         
       )}
+      <Testimonials />
     </>
   );
 };
