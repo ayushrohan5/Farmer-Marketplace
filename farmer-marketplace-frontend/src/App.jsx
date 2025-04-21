@@ -11,6 +11,8 @@ import EditProduct from './pages/EditProduct';
 import SearchResults from './pages/SearchResults';
 import ProductDetail from './pages/ProductDetail';
 import AboutUs from './pages/AboutUs';
+import { ToastContainer } from 'react-toastify';
+import CartPage from './pages/CartPage';
 
 function App() {
   return (
@@ -28,7 +30,9 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
     </Router>
   );
 }

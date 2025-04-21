@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext'; // 👈 import useCart
+import { toast } from 'react-toastify'; // 👈 import toast
 
 const useQuery = () => new URLSearchParams(useLocation().search);
 
@@ -11,6 +13,7 @@ const SearchResults = () => {
   const searchTerm = query.get('q');
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const { fetchCartCount } = useCart(); // 👈
 
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -32,6 +35,21 @@ const SearchResults = () => {
     fetchSearchResults();
   }, [searchTerm, token]);
 
+  const handleAddToCart = async (e, productId) => {
+    e.stopPropagation();
+    try {
+      await axios.post('http://localhost:5000/api/cart/add', {
+        productId,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Product added to cart!');
+      fetchCartCount();
+    } catch (err) {
+      console.error('Failed to add to cart:', err);
+    }
+  };
+
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold text-green-700 mb-6">Search Results for "{searchTerm}"</h2>
@@ -45,7 +63,7 @@ const SearchResults = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
               onClick={() => navigate(`/product/${product._id}`)}
-              className="cursor-pointer flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow hover:scale-[1.02] min-h-[300px]"
+              className="cursor-pointer flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow hover:scale-[1.02] min-h-[300px] relative"
             >
               <div className="w-full md:w-1/3 h-80 md:h-full overflow-hidden relative">
                 <img
@@ -60,6 +78,14 @@ const SearchResults = () => {
                 <p className="text-green-600 font-semibold text-lg mb-1">₹{product.price}</p>
                 <p className="text-sm text-gray-500">Category: {product.category || 'N/A'}</p>
               </div>
+
+              {/* Add to Cart Button */}
+              <button
+                onClick={(e) => handleAddToCart(e, product._id)}
+                className="absolute bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
+              >
+                Add to Cart
+              </button>
             </motion.div>
           ))}
         </div>

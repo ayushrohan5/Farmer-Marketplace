@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import { useCart } from '../context/CartContext'; // 👈
+import { toast } from 'react-toastify'; // 👈
 
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const token = localStorage.getItem('token');
+  const { fetchCartCount } = useCart(); // 👈
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,6 +27,20 @@ const ProductDetail = () => {
 
     fetchProduct();
   }, [id]);
+
+  const handleAddToCart = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/cart/add', {
+        productId: product._id,
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Product added to cart!');
+      fetchCartCount(); // 👈 update cart count in header
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+    }
+  };
 
   if (!product) {
     return <div className="text-center mt-10 text-gray-700">Loading...</div>;
@@ -63,6 +80,14 @@ const ProductDetail = () => {
         <div className="text-md text-gray-500">Weight: {product.weight}</div>
         <div className="text-sm text-gray-400">Category: {product.category}</div>
         <div className="text-sm text-gray-400">Location: {product.location}</div>
+
+        {/* Add to Cart Button */}
+        <button
+          onClick={handleAddToCart}
+          className="mt-4 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300"
+        >
+          Add to Cart
+        </button>
       </motion.div>
     </motion.div>
   );

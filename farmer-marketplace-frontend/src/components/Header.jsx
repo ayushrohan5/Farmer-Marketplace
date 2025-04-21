@@ -1,34 +1,60 @@
+// frontend/components/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaTrash } from 'react-icons/fa';
+import { useCart } from '../context/CartContext';
 
 const Header = () => {
+  const { cartCount, fetchCartCount } = useCart();
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
 
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [showCartDropdown, setShowCartDropdown] = useState(false);
 
   const searchRef = useRef(null);
+  const cartRef = useRef(null);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    navigate('/login');
+  const fetchCartItems = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/cart', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setCartItems(res.data.cartItems || []);
+    } catch (err) {
+      console.error('Error fetching cart:', err);
+    }
   };
+
+  const handleDelete = async (itemId) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/cart/${itemId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      fetchCartItems();
+      fetchCartCount();
+    } catch (err) {
+      console.error('Error deleting cart item:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (showCartDropdown) {
+      fetchCartItems();
+    }
+  }, [showCartDropdown]);
 
   // Live search
   useEffect(() => {
     const fetchResults = async (query) => {
       if (!query) return setResults([]);
-
       try {
         const res = await axios.get(`http://localhost:5000/api/products/search?q=${query}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setResults(res.data.products || res.data);
       } catch (err) {
@@ -39,28 +65,30 @@ const Header = () => {
 
     const debounceTimeout = setTimeout(() => fetchResults(searchTerm), 300);
     return () => clearTimeout(debounceTimeout);
-  }, [searchTerm, token]);
+  }, [searchTerm]);
 
-  // Hide search results on click outside
+  // Hide dropdowns on outside click
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-        setResults([]);
-      }
+    const handleClickOutside = (e) => {
+      if (!searchRef.current?.contains(e.target)) setResults([]);
+      if (!cartRef.current?.contains(e.target)) setShowCartDropdown(false);
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Handle Enter key press
   const handleEnterPress = (e) => {
     if (e.key === 'Enter' && searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);  // Navigate to search results page
-      setResults([]);  // Clear live results
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+      setResults([]);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/login');
   };
 
   return (
@@ -69,14 +97,16 @@ const Header = () => {
         🌾 Farmer Market
       </Link>
 
-      {/* Search Bar for Consumers Only */}
-      {role === 'consumer' && (
-        <div className="relative w-full max-w-md flex items-center gap-2" ref={searchRef}>
+      {role === "consumer" && (
+        <div
+          className="relative w-full max-w-md flex items-center gap-2"
+          ref={searchRef}
+        >
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={handleEnterPress}  /* Handle Enter key press */
+            onKeyDown={handleEnterPress}
             placeholder="Search products..."
             className="w-full p-2 rounded text-black placeholder-white"
           />
@@ -84,7 +114,7 @@ const Header = () => {
             onClick={() => {
               if (searchTerm.trim()) {
                 navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
-                setResults([]);  // Clear live results
+                setResults([]);
               }
             }}
             className="bg-white text-green-700 p-2 rounded hover:bg-gray-200"
@@ -111,14 +141,28 @@ const Header = () => {
         </div>
       )}
 
-      <nav className="space-x-4">
-        <Link to="/" className="hover:underline">Home</Link>
+      <nav className="space-x-4 flex items-center">
+        <Link to="/" className="hover:underline">
+          Home
+        </Link>
+        {role === "consumer" && (
+          <span
+            onClick={() => navigate("/cart")}
+            className="bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
+          >
+            🛒 {cartCount}
+          </span>
+        )}
 
+        <Link to="/aboutus" className="hover:underline">
+          About us
+        </Link>
         {token && role ? (
           <>
-          <Link to="/aboutus" className="hover:underline">About us</Link>
             <Link
-              to={role === 'farmer' ? '/farmer-dashboard' : '/customer-dashboard'}
+              to={
+                role === "farmer" ? "/farmer-dashboard" : "/customer-dashboard"
+              }
               className="hover:underline"
             >
               Dashboard
@@ -132,9 +176,9 @@ const Header = () => {
           </>
         ) : (
           <>
-           <Link to="/aboutus" className="hover:underline">About us</Link>
-            <Link to="/login" className="hover:underline">Login</Link>
-            <Link to="/register" className="hover:underline">Register</Link>
+            <Link to="/login" className="hover:underline">
+              Login
+            </Link>
           </>
         )}
       </nav>
