@@ -50,7 +50,10 @@ const CartPage = () => {
     fetchCartItems();
   }, []);
 
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.product.price, 0);
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0
+  );
 
   return (
     <div className="min-h-screen bg-green-100 p-8 relative">
@@ -76,6 +79,10 @@ const CartPage = () => {
               <div className="flex-1">
                 <h3 className="text-xl font-bold text-green-800">{item.product.name}</h3>
                 <p className="text-lg text-gray-700">₹{item.product.price}</p>
+                <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                <p className="text-sm text-gray-800 font-semibold">
+                  Subtotal: ₹{item.product.price * item.quantity}
+                </p>
               </div>
               <button
                 onClick={() => confirmDelete(item._id)}
@@ -101,8 +108,7 @@ const CartPage = () => {
 
       {/* Confirmation Modal */}
       {showConfirm && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-80">
             <p className="text-lg font-semibold text-gray-800 mb-4">
               Are you sure you want to delete this item?
