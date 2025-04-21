@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       
-      toast.success('Product added to cart successfully');
+      alert('Product added to cart successfully');
 
       fetchCartCount(); // Update header count
       

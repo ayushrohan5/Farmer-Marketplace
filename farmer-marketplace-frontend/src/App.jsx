@@ -32,7 +32,7 @@ function App() {
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/cart" element={<CartPage />} />
       </Routes>
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar />
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 }
