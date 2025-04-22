@@ -67,35 +67,48 @@ const updateCartQuantity = async (req, res) => {
 };
 
 const addToCart = async (req, res) => {
-    try {
-      const { productId } = req.body;
-      const userId = req.user.id;
-  
-      // Check if product already exists in user's cart
-      const existingCartItem = await Cart.findOne({ user: userId, product: productId });
-  
-      if (existingCartItem) {
-        // If it exists, just increase quantity
-        existingCartItem.quantity += 1;
-        await existingCartItem.save();
-        return res.status(200).json({ message: 'Cart item quantity updated' });
-      }
-  
-      // Otherwise create new cart item
-      const newCartItem = new Cart({
-        user: userId,
-        product: productId,
-        quantity: 1,
-      });
-  
-      await newCartItem.save();
-      res.status(201).json({ message: 'Item added to cart successfully' });
-  
-    } catch (error) {
-      console.error('Add to cart error:', error);
-      res.status(400).json({ message: 'Error adding to cart', error: error.message });
+  try {
+    const { productId } = req.body;
+    const userId = req.user.id;
+
+    const product = await Product.findById(productId);
+    
+    if (product.stock === 0) {
+      return res.status(400).json({ message: 'Product is out of stock' });
     }
-  };
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // Check if product already exists in user's cart
+    const existingCartItem = await Cart.findOne({ user: userId, product: productId });
+
+    if (existingCartItem) {
+      if (existingCartItem.quantity >= product.stock) {
+        return res.status(400).json({ message: 'Cannot add more than available stock' });
+      }
+      
+      existingCartItem.quantity += 1;
+      await existingCartItem.save();
+      return res.status(200).json({ message: 'Cart item quantity updated' });
+    }
+
+    // Otherwise create new cart item
+    const newCartItem = new Cart({
+      user: userId,
+      product: productId,
+      quantity: 1,
+    });
+
+    await newCartItem.save();
+    res.status(201).json({ message: 'Item added to cart successfully' });
+
+  } catch (error) {
+    console.error('Add to cart error:', error);
+    res.status(400).json({ message: 'Error adding to cart', error: error.message });
+  }
+};
   
 
   const getCartCount = async (req, res) => {

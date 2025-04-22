@@ -10,6 +10,7 @@ const ProductCard = ({ product }) => {
   const { fetchCartCount } = useCart();
   const token = localStorage.getItem('token');
   const [quantityInCart, setQuantityInCart] = useState(0);
+  const [maxReached, setMaxReached] = useState(false);
 
   const fetchProductQuantity = async () => {
     try {
@@ -20,7 +21,9 @@ const ProductCard = ({ product }) => {
       const item = res.data.cartItems.find(
         (item) => item.product._id === product._id
       );
-      setQuantityInCart(item ? item.quantity : 0);
+      const quantity = item ? item.quantity : 0;
+      setQuantityInCart(quantity);
+      setMaxReached(quantity >= product.stock);
     } catch (err) {
       console.error('Error fetching cart quantity:', err);
     }
@@ -45,6 +48,7 @@ const ProductCard = ({ product }) => {
       fetchProductQuantity();
     } catch (err) {
       console.error('Failed to add to cart:', err);
+      toast.error(err?.response?.data?.message || 'Error adding to cart');
     }
   };
 
@@ -63,7 +67,6 @@ const ProductCard = ({ product }) => {
 
   const updateQuantity = async (type) => {
     if (type === 'decrement' && quantityInCart === 1) {
-      // Special case: remove item completely
       handleRemoveFromCart();
     } else {
       try {
@@ -71,7 +74,7 @@ const ProductCard = ({ product }) => {
           `http://localhost:5000/api/cart/update`,
           {
             productId: product._id,
-            action: type, // 'increment' or 'decrement'
+            action: type,
           },
           {
             headers: { Authorization: `Bearer ${token}` },
@@ -81,6 +84,7 @@ const ProductCard = ({ product }) => {
         fetchProductQuantity();
       } catch (err) {
         console.error('Failed to update quantity:', err);
+        toast.error(err?.response?.data?.message || 'Error updating cart');
       }
     }
   };
@@ -114,26 +118,35 @@ const ProductCard = ({ product }) => {
           Add to Cart
         </button>
       ) : (
-        <div className="absolute bottom-4 right-4 flex items-center gap-2 z-10">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              updateQuantity('decrement');
-            }}
-            className="bg-gray-300 hover:bg-gray-400 px-2 py-1 rounded text-sm"
-          >
-            –
-          </button>
-          <span className="text-sm font-semibold">{quantityInCart}</span>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              updateQuantity('increment');
-            }}
-            className="bg-gray-300 hover:bg-gray-400 px-2 py-1 rounded text-sm"
-          >
-            +
-          </button>
+        <div className="absolute bottom-4 right-4 flex flex-col items-center gap-1 z-10">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateQuantity('decrement');
+              }}
+              className="bg-gray-300 hover:bg-gray-400 px-2 py-1 rounded text-sm"
+            >
+              –
+            </button>
+            <span className="text-sm font-semibold">{quantityInCart}</span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                updateQuantity('increment');
+              }}
+              className={`px-2 py-1 rounded text-sm ${
+                maxReached ? 'bg-gray-200 cursor-not-allowed' : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+              disabled={maxReached}
+              title={maxReached ? 'Max stock reached' : ''}
+            >
+              +
+            </button>
+          </div>
+          {maxReached && (
+            <span className="text-xs text-red-600 mt-1">Max stock reached</span>
+          )}
         </div>
       )}
     </motion.div>

@@ -35,21 +35,6 @@ const SearchResults = () => {
     fetchSearchResults();
   }, [searchTerm, token]);
 
-  const handleAddToCart = async (e, productId) => {
-    e.stopPropagation();
-    try {
-      await axios.post('http://localhost:5000/api/cart/add', {
-        productId,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      toast.success('Product added to cart!');
-      fetchCartCount();
-    } catch (err) {
-      console.error('Failed to add to cart:', err);
-    }
-  };
-
   return (
     <div className="p-6">
       <h2 className="text-3xl font-bold text-green-700 mb-6">Search Results for "{searchTerm}"</h2>
@@ -79,13 +64,7 @@ const SearchResults = () => {
                 <p className="text-sm text-gray-500">Category: {product.category || 'N/A'}</p>
               </div>
 
-              {/* Add to Cart Button */}
-              <button
-                onClick={(e) => handleAddToCart(e, product._id)}
-                className="absolute bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition"
-              >
-                Add to Cart
-              </button>
+          
             </motion.div>
           ))}
         </div>
