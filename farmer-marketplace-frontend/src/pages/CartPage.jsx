@@ -3,14 +3,21 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import { FaTrash } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
+  const [razorpayKey, setRazorpayKey] = useState('');
 
   const { fetchCartCount } = useCart();
   const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    fetchCartItems();
+    fetchRazorpayKey();
+  }, []);
 
   const fetchCartItems = async () => {
     try {
@@ -20,6 +27,15 @@ const CartPage = () => {
       setCartItems(res.data.cartItems || []);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const fetchRazorpayKey = async () => {
+    try {
+      const { data } = await axios.get('http://localhost:5000/api/payment/get-key');
+      setRazorpayKey(data.key);
+    } catch (err) {
+      console.error('Failed to load Razorpay key', err);
     }
   };
 
@@ -46,9 +62,71 @@ const CartPage = () => {
     setShowConfirm(false);
   };
 
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleCheckout = async () => {
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert('Razorpay SDK failed to load. Are you online?');
+      return;
+    }
+
+    try {
+      const { data: order } = await axios.post(
+        'http://localhost:5000/api/payment/create-order',
+        { amount: totalPrice },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const options = {
+        key: razorpayKey,
+        amount: order.amount,
+        currency: order.currency,
+        name: 'FarmFresh',
+        description: 'Cart Payment',
+        order_id: order.id,
+        handler: async function (response) {
+          try {
+            const verifyRes = await axios.post(
+              'http://localhost:5000/api/payment/verify-payment',
+              {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            if (verifyRes.data.success) {
+              toast.success('🎉 Payment Successful!');
+              fetchCartCount();
+              setCartItems([]); // Optionally clear cart
+            } else {
+              alert('❌ Payment verification failed');
+            }
+          } catch (err) {
+            console.error('Verification error', err);
+          }
+        },
+        theme: {
+          color: '#38a169',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (err) {
+      console.error('Checkout error:', err);
+    }
+  };
 
   const totalPrice = cartItems.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
@@ -100,13 +178,15 @@ const CartPage = () => {
           <p className="text-2xl font-semibold text-green-800 mb-4">
             Total: ₹{totalPrice}
           </p>
-          <button className="bg-green-700 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-800 transition">
+          <button
+            onClick={handleCheckout}
+            className="bg-green-700 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-800 transition"
+          >
             Proceed to Checkout
           </button>
         </div>
       )}
 
-      {/* Confirmation Modal */}
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
           <div className="bg-white p-6 rounded-2xl shadow-xl text-center w-80">
