@@ -196,7 +196,7 @@ const CartPage = () => {
           </p>
           <button
             onClick={handleCheckout}
-            className="bg-green-700 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-800 transition"
+            className="bg-green-700 text-white cursor-pointer px-6 py-3 rounded-xl text-lg font-semibold hover:bg-green-800 transition"
           >
             Proceed to Checkout
           </button>
