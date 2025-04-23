@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const Payment = require('../models/paymentModel');
 const Cart = require('../models/Cart'); // Adjust path as needed
 const Order = require('../models/paymentModel');
+const Payments = require('../models/paymentModel');
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -92,9 +93,19 @@ const verifyPayment = async (req, res) => {
 };
 
 
+const getMyPaidOrders = async (req, res) => {
+  try {
+    const orders = await Payments.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(orders);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch paid orders', error: err.message });
+  }
+};
+
+
 
 const getRazorpayKey = (req, res) => {
     res.status(200).json({ key: process.env.RAZORPAY_KEY_ID });
   };
   
-  module.exports = { createOrder, verifyPayment, getRazorpayKey, saveOrder };
+  module.exports = { createOrder, verifyPayment, getRazorpayKey, saveOrder, getMyPaidOrders };
