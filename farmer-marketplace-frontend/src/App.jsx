@@ -14,6 +14,9 @@ import AboutUs from './pages/AboutUs';
 import { ToastContainer } from 'react-toastify';
 import CartPage from './pages/CartPage';
 import ContactPage from './pages/ContactPage';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms';
+import Footer from './pages/Footer';
 
 function App() {
   return (
@@ -33,8 +36,12 @@ function App() {
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+     
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
+      <Footer />
     </Router>
   );
 }

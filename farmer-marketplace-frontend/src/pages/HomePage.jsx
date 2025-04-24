@@ -5,6 +5,7 @@ import HeroSection from '../components/HeroSection';
 import ProductList from '../components/ProductList';
 import Testimonials from '../components/Testimonials';
 import CaseStudiesSection from '../components/caseStudies';
+import Footer from './Footer';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -39,6 +40,7 @@ const HomePage = () => {
       )}
       <Testimonials />
       <CaseStudiesSection />
+     
     </>
   );
 };

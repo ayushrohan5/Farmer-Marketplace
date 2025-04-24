@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Footer';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -35,6 +36,7 @@ const LoginPage = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center">
       <motion.div
         initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -95,6 +97,7 @@ const LoginPage = () => {
 
       <ToastContainer />
     </div>
+    </>
   );
 };
 

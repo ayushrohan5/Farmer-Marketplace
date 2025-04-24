@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Footer from "./Footer";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export default function ContactPage() {
   };
 
   return (
+    <>
     <section className="min-h-screen bg-green-50 py-16 px-6 md:px-20">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -80,5 +82,6 @@ export default function ContactPage() {
         </form>
       </motion.div>
     </section>
+    </>
   );
 }

@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from './Footer';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -44,6 +45,7 @@ const RegisterPage = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 flex items-center justify-center p-4">
       <motion.div
         initial={{ y: 40, opacity: 0, scale: 0.95 }}
@@ -124,6 +126,8 @@ const RegisterPage = () => {
 
       <ToastContainer />
     </div>
+    
+    </>
   );
 };
 

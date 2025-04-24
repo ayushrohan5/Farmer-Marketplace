@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import aboutImage from "../assets/about-us.png"; // Replace with your image path
+import Footer from "./Footer";
 
 const AboutUs = () => {
   return (
+    <>
     <div
       className="min-h-screen flex items-center justify-center bg-green-100 px-6 py-16"
       style={{ animation: "backgroundAnimation 2s ease-out" }}
@@ -40,6 +42,8 @@ const AboutUs = () => {
         </motion.div>
       </div>
     </div>
+    
+    </>
   );
 };
 
