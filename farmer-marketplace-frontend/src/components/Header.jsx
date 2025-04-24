@@ -157,6 +157,9 @@ const Header = () => {
         <Link to="/aboutus" className="hover:underline">
           About us
         </Link>
+        <Link to="/contact" className="hover:underline">
+          Contact
+        </Link>
         {token && role ? (
           <>
             <Link

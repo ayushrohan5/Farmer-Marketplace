@@ -13,6 +13,7 @@ import ProductDetail from './pages/ProductDetail';
 import AboutUs from './pages/AboutUs';
 import { ToastContainer } from 'react-toastify';
 import CartPage from './pages/CartPage';
+import ContactPage from './pages/ContactPage';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} />
     </Router>
