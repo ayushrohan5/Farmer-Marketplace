@@ -18,4 +18,5 @@ To run backend node.js code write:
 
 1. npm i
 2. nodemon server
+   
 create a .env file in backend and define your own: MONGO_URI, PORT, JWT_SECRET, RAZORPAY_KEY_ID, RAZORPAY_SECRET, EMAIL_USER, EMAIL_PASS
