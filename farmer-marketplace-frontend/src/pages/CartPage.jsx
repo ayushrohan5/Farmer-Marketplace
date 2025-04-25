@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaTrash } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -72,6 +73,8 @@ const CartPage = () => {
     });
   };
 
+  
+const navigate = useNavigate();
   const handleCheckout = async () => {
     const res = await loadRazorpayScript();
     if (!res) {
@@ -123,6 +126,7 @@ const CartPage = () => {
               toast.success('🎉 Payment Successful!');
               setCartItems([]);
               fetchCartCount();
+              navigate('/customer-dashboard');
             } else {
               alert('❌ Payment verification failed');
             }
