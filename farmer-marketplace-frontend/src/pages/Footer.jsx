@@ -20,7 +20,7 @@ const Footer = () => {
         </div>
 
         {/* Explore (moved right) */}
-        <div className="md:pl-6">
+        <div className="md:pl-[90px]">
           <h3 className="text-xl font-semibold mb-3">Explore</h3>
           <ul className="space-y-2 text-green-800">
             <li><Link to="/" className="hover:underline">Home</Link></li>

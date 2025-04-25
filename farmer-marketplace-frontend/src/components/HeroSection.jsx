@@ -24,7 +24,7 @@ const HeroSection = () => {
         transition={{ delay: 0.3, duration: 1 }}
         className="text-base sm:text-lg md:text-xl text-gray-700 mb-6 max-w-2xl"
       >
-        Connecting local farmers directly with conscious consumers. Support
+        Connecting local farmers directly with consumers. Support
         local. Eat fresh. Live healthy.
       </motion.p>
 
