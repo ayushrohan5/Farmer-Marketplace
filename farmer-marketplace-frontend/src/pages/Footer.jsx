@@ -43,7 +43,7 @@ const Footer = () => {
         <div>
           <h3 className="text-xl font-semibold mb-3">Contact Us</h3>
           <ul className="space-y-2 text-green-800">
-            <li>Email: support@farmermarket.com</li>
+            <li>Email: ayushrohan5@gmail.com</li>
             <li>Phone: +91 0000000000</li>
             <li>Address: 123 Green Valley, Punjab, India</li>
           </ul>
