@@ -34,7 +34,7 @@ export default function ContactPage() {
   };
 
   return (
-    <section className="min-h-screen bg-green-50 py-16 px-6 md:px-20">
+    <section className="md:min-h-screen min-h-[50vh] bg-green-50 py-16 px-6 md:px-20">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}

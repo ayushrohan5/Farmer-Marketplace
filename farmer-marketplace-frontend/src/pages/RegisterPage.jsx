@@ -46,7 +46,7 @@ const RegisterPage = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 flex items-center justify-center p-4">
+    <div className="md:min-h-screen min-h-[50vh] bg-gradient-to-br from-green-300 viagreen-200 to-green-100 to-green-200 flex items-center justify-center p-4">
       <motion.div
         initial={{ y: 40, opacity: 0, scale: 0.95 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
