@@ -75,7 +75,7 @@ const CustomerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-100">
+    <div className="md:min-h-screen p-6 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4 text-green-700">
         🌾 Welcome, {user.name || 'Customer'}!
       </h1>

@@ -1,8 +1,7 @@
-// frontend/components/Header.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaSearch, FaTrash } from 'react-icons/fa';
+import { FaSearch, FaTrash, FaBars } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 
 const Header = () => {
@@ -15,6 +14,7 @@ const Header = () => {
   const [results, setResults] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [showCartDropdown, setShowCartDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const searchRef = useRef(null);
   const cartRef = useRef(null);
@@ -92,7 +92,15 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-green-700 text-white p-4 shadow-md flex flex-col md:flex-row items-center justify-between gap-4">
+    <header className="bg-green-700 text-white p-4 shadow-md flex flex-col md:flex-row items-center justify-between gap-4 relative">
+      {/* Mobile menu icon */}
+      <button 
+        className="md:hidden absolute top-4 left-4 text-white"
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      >
+        <FaBars className="w-6 h-6" />
+      </button>
+
       <Link to="/" className="text-2xl font-bold">
         🌾 Farmer Market
       </Link>
@@ -141,31 +149,37 @@ const Header = () => {
         </div>
       )}
 
-      <nav className="space-x-4 flex items-center">
-        <Link to="/" className="hover:underline">
-          Home
-        </Link>
-        {role === "consumer" && (
-          <span
-            onClick={() => navigate("/cart")}
-            className="bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
-          >
-            🛒 {cartCount}
-          </span>
-        )}
+      {/* Cart count for small screens */}
+      {role === "consumer" && (
+        <span
+          onClick={() => navigate("/cart")}
+          className="md:hidden absolute top-4 right-4 bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
+        >
+          🛒 {cartCount}
+        </span>
+      )}
 
-        <Link to="/aboutus" className="hover:underline">
-          About us
-        </Link>
-        <Link to="/contact" className="hover:underline">
-          Contact
-        </Link>
+      {/* Mobile Menu Content */}
+      <nav 
+        className={`md:flex-row md:space-x-4 flex flex-col items-center space-y-4 md:space-y-0 ${isMobileMenuOpen ? 'block' : 'hidden'} md:block`}>
+        <Link to="/" className="hover:underline">Home</Link>
+
+        {/* {role === "consumer" && (
+          // <span
+          //   onClick={() => navigate("/cart")}
+          //   className="bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
+          // >
+          //   🛒 {cartCount}
+          // </span>
+        )} */}
+
+        <Link to="/aboutus" className="hover:underline">About us</Link>
+        <Link to="/contact" className="hover:underline">Contact</Link>
+
         {token && role ? (
           <>
             <Link
-              to={
-                role === "farmer" ? "/farmer-dashboard" : "/customer-dashboard"
-              }
+              to={role === "farmer" ? "/farmer-dashboard" : "/customer-dashboard"}
               className="hover:underline"
             >
               Dashboard
@@ -178,11 +192,7 @@ const Header = () => {
             </button>
           </>
         ) : (
-          <>
-            <Link to="/login" className="hover:underline">
-              Login
-            </Link>
-          </>
+          <Link to="/login" className="hover:underline">Login</Link>
         )}
       </nav>
     </header>

@@ -150,7 +150,7 @@ const CartPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-green-100 p-8 relative">
+    <div className="md:min-h-screen min-h-[50vh] bg-green-100 p-8 relative">
       <h1 className="text-4xl font-bold text-green-800 mb-6 text-center">🛒 Your Cart</h1>
 
       {cartItems.length === 0 ? (
