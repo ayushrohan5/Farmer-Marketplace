@@ -18,6 +18,11 @@ const paymentSchema = new mongoose.Schema({
   signature: String,
   createdAt: { type: Date, default: Date.now },
   status: { type: String, default: 'Pending' },
+  deliveryStatus: {
+    type: String,
+    enum: ["Pending", "Shipped", "Delivered"],
+    default: "Pending",
+  },
 });
 
 module.exports = mongoose.model('Payment', paymentSchema);

@@ -30,6 +30,7 @@ const saveOrder = async (req, res) => {
       razorpay_payment_id,
       razorpay_signature,
       status: 'Paid',
+      deliveryStatus: 'Pending',
     });
 
     await order.save();

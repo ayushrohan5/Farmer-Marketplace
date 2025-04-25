@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { FaSearch, FaTrash, FaBars } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
@@ -7,6 +7,8 @@ import { useCart } from '../context/CartContext';
 const Header = () => {
   const { cartCount, fetchCartCount } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
 
@@ -78,6 +80,11 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const handleEnterPress = (e) => {
     if (e.key === 'Enter' && searchTerm.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
@@ -101,10 +108,11 @@ const Header = () => {
         <FaBars className="w-6 h-6" />
       </button>
 
-      <Link to="/" className="text-2xl font-bold">
+      <Link to="/" className="text-2xl font-bold mr-4">
         🌾 Farmer Market
       </Link>
 
+      {/* Search Bar for Consumer */}
       {role === "consumer" && (
         <div
           className="relative w-full max-w-md flex items-center gap-2"
@@ -149,6 +157,18 @@ const Header = () => {
         </div>
       )}
 
+      {/* Cart count for larger screens */}
+      {role === "consumer" && (
+        <div className="hidden md:flex items-center">
+          <span
+            onClick={() => navigate("/cart")}
+            className="bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
+          >
+            🛒 {cartCount}
+          </span>
+        </div>
+      )}
+
       {/* Cart count for small screens */}
       {role === "consumer" && (
         <span
@@ -159,20 +179,10 @@ const Header = () => {
         </span>
       )}
 
-      {/* Mobile Menu Content */}
+      {/* Navigation links */}
       <nav 
         className={`md:flex-row md:space-x-4 flex flex-col items-center space-y-4 md:space-y-0 ${isMobileMenuOpen ? 'block' : 'hidden'} md:block`}>
         <Link to="/" className="hover:underline">Home</Link>
-
-        {/* {role === "consumer" && (
-          // <span
-          //   onClick={() => navigate("/cart")}
-          //   className="bg-white text-green-700 px-3 py-1 rounded-full font-bold cursor-pointer"
-          // >
-          //   🛒 {cartCount}
-          // </span>
-        )} */}
-
         <Link to="/aboutus" className="hover:underline">About us</Link>
         <Link to="/contact" className="hover:underline">Contact</Link>
 

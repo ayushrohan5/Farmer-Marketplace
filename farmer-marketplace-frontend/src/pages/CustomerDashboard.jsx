@@ -77,22 +77,26 @@ const CustomerDashboard = () => {
   return (
     <div className="md:min-h-screen p-6 bg-gray-100">
       <h1 className="text-3xl font-bold mb-4 text-green-700">
-        🌾 Welcome, {user.name || 'Customer'}!
+        🌾 Welcome, {user.name || "Customer"}!
       </h1>
 
       <div className="flex space-x-4 mb-6">
         <button
-          onClick={() => setActiveTab('orders')}
+          onClick={() => setActiveTab("orders")}
           className={`px-4 py-2 rounded ${
-            activeTab === 'orders' ? 'bg-green-600 text-white' : 'bg-white border'
+            activeTab === "orders"
+              ? "bg-green-600 text-white"
+              : "bg-white border"
           }`}
         >
           📦 My Orders
         </button>
         <button
-          onClick={() => setActiveTab('profile')}
+          onClick={() => setActiveTab("profile")}
           className={`px-4 py-2 rounded ${
-            activeTab === 'profile' ? 'bg-green-600 text-white' : 'bg-white border'
+            activeTab === "profile"
+              ? "bg-green-600 text-white"
+              : "bg-white border"
           }`}
         >
           🧑 Profile
@@ -100,9 +104,9 @@ const CustomerDashboard = () => {
       </div>
 
       <div className="bg-white p-4 rounded-xl shadow-md">
-        {activeTab === 'products' && <ProductList />}
+        {activeTab === "products" && <ProductList />}
 
-        {activeTab === 'orders' && (
+        {activeTab === "orders" && (
           <div>
             <div className="flex justify-between items-center mb-4 flex-wrap gap-4">
               <h2 className="text-xl font-semibold">📦 Your Paid Orders</h2>
@@ -131,7 +135,7 @@ const CustomerDashboard = () => {
                   onClick={toggleSortOrder}
                   className="text-green-600 hover:text-green-800 text-sm underline"
                 >
-                  Sort: {sortOrder === 'asc' ? 'Oldest First' : 'Newest First'}
+                  Sort: {sortOrder === "asc" ? "Oldest First" : "Newest First"}
                 </button>
               </div>
             </div>
@@ -139,7 +143,9 @@ const CustomerDashboard = () => {
             {orders.length === 0 ? (
               <p className="text-gray-500">You have no paid orders yet.</p>
             ) : sortedAndFilteredOrders.length === 0 ? (
-              <p className="text-gray-500">No orders found for selected month.</p>
+              <p className="text-gray-500">
+                No orders found for selected month.
+              </p>
             ) : (
               <>
                 <motion.div
@@ -154,6 +160,7 @@ const CustomerDashboard = () => {
                         <th className="py-3 px-6">Order Details</th>
                         <th className="py-3 px-6">Amount</th>
                         <th className="py-3 px-6">Date</th>
+                        <th className="px-4 py-2">Delivery Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -166,17 +173,40 @@ const CustomerDashboard = () => {
                           className="border-b hover:bg-green-50"
                         >
                           <td className="py-2 px-6">
-                            <div className="font-medium text-green-700">{order._id}</div>
+                            <div className="font-medium text-green-700">
+                              {order._id}
+                            </div>
                             <div className="mt-2 text-sm text-gray-600">
                               {order.products?.map((product, index) => (
                                 <div key={index} className="mb-1">
-                                  • <span className="font-semibold">{product?.name}</span> x {product?.quantity} — ₹{product?.price}
+                                  •{" "}
+                                  <span className="font-semibold">
+                                    {product?.name}
+                                  </span>{" "}
+                                  x {product?.quantity} — ₹{product?.price}
                                 </div>
                               ))}
                             </div>
                           </td>
-                          <td className="py-2 px-6 text-green-800 font-bold">₹{order?.amount}</td>
-                          <td className="py-2 px-6">{new Date(order?.createdAt).toLocaleString()}</td>
+                          <td className="py-2 px-6 text-green-800 font-bold">
+                            ₹{order?.amount}
+                          </td>
+                          <td className="py-2 px-6">
+                            {new Date(order?.createdAt).toLocaleString()}
+                          </td>
+                          <td className="px-4 py-2">
+                            <span
+                              className={`px-2 py-1 rounded text-white text-xs ${
+                                order.deliveryStatus === "Pending"
+                                  ? "bg-yellow-500"
+                                  : order.deliveryStatus === "Shipped"
+                                  ? "bg-blue-500"
+                                  : "bg-green-600"
+                              }`}
+                            >
+                              {order.deliveryStatus}
+                            </span>
+                          </td>
                         </motion.tr>
                       ))}
                     </tbody>
@@ -186,7 +216,9 @@ const CustomerDashboard = () => {
                 {/* Pagination */}
                 <div className="flex justify-between items-center mt-4">
                   <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                     className="px-4 py-2 rounded bg-green-200 hover:bg-green-300 transition disabled:opacity-50"
                   >
@@ -196,7 +228,9 @@ const CustomerDashboard = () => {
                     Page {currentPage} of {totalPages}
                   </span>
                   <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 rounded bg-green-200 hover:bg-green-300 transition disabled:opacity-50"
                   >
@@ -208,12 +242,18 @@ const CustomerDashboard = () => {
           </div>
         )}
 
-        {activeTab === 'profile' && (
+        {activeTab === "profile" && (
           <div>
             <h2 className="text-xl font-semibold mb-4">🧾 Your Profile Info</h2>
-            <p><strong>Name:</strong> {user.name}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Role:</strong> {user.role}</p>
+            <p>
+              <strong>Name:</strong> {user.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+            <p>
+              <strong>Role:</strong> {user.role}
+            </p>
           </div>
         )}
       </div>
