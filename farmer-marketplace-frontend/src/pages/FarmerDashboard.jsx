@@ -24,17 +24,21 @@ const FarmerDashboard = () => {
   }, []);
 
   return (
-    <div className="p-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-green-700">🌾 Your Products</h1>
+    <div className="p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-green-700 text-center sm:text-left">
+          🌾 Your Products
+        </h1>
         <button
           onClick={() => navigate('/add-product')}
-          className="bg-green-600 text-white px-6 py-2 rounded-full shadow hover:bg-green-700 transition"
+          className="bg-green-600 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full shadow hover:bg-green-700 transition w-full sm:w-auto"
         >
           ➕ Add Product
         </button>
       </div>
-      <ProductTable products={products} refreshProducts={fetchProducts} />
+      <div className="overflow-x-auto">
+        <ProductTable products={products} refreshProducts={fetchProducts} />
+      </div>
     </div>
   );
 };
