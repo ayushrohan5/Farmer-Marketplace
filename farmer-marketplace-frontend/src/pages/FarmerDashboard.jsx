@@ -10,7 +10,7 @@ const FarmerDashboard = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/farmer/my-products', {
+      const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/farmer/my-products', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProducts(res.data.products);

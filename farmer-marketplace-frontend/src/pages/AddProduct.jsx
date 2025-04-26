@@ -22,7 +22,7 @@ const AddProduct = () => {
   // useEffect(() => {
   //   const fetchProducts = async () => {
   //     try {
-  //       const response = await axios.get('http://localhost:5000/api/farmer/my-products', {
+  //       const response = await axios.get('https://farmer-marketplace-backend.vercel.app/api/farmer/my-products', {
   //         headers: { Authorization: `Bearer ${token}` }
   //       });
   //       setExistingProducts(response.data.products || []);
@@ -49,7 +49,7 @@ const AddProduct = () => {
 
     try {
       const response = await axios.post(
-        'http://localhost:5000/api/farmer/add-product',
+        'https://farmer-marketplace-backend.vercel.app/api/farmer/add-product',
         { name, price, stock, weight, description, image, category, location },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -22,7 +22,7 @@ const EditProduct = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/farmer/my-products', {
+        const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/farmer/my-products', {
           headers: { Authorization: `Bearer ${token}` }
         });
         const target = res.data.products.find(p => p._id === id);
@@ -41,7 +41,7 @@ const EditProduct = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/api/farmer/update-product/${id}`, form, {
+      await axios.put(`https://farmer-marketplace-backend.vercel.app/api/farmer/update-product/${id}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Updated successfully');

@@ -23,7 +23,7 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/contact", formData);
+      await axios.post("https://farmer-marketplace-backend.vercel.app/api/contact", formData);
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {

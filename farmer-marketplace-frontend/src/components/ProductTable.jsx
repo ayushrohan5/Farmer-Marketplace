@@ -18,7 +18,7 @@ const ProductTable = ({ products, refreshProducts }) => {
 
   const handleConfirmedDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/farmer/delete-product/${deleteId}`, {
+      await axios.delete(`https://farmer-marketplace-backend.vercel.app/api/farmer/delete-product/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success('Product deleted successfully');

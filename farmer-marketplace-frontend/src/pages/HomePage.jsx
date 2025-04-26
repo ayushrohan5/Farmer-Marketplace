@@ -16,7 +16,7 @@ const HomePage = () => {
     const fetchProducts = async () => {
       try {
         if (!token || role === 'farmer') return; // Don't fetch if user is a farmer
-        const response = await axios.get('http://localhost:5000/api/products', {
+        const response = await axios.get('https://farmer-marketplace-backend.vercel.app/api/products', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

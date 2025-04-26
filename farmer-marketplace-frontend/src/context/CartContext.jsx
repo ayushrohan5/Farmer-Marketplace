@@ -9,7 +9,7 @@ export const CartProvider = ({ children }) => {
   const fetchCartCount = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5000/api/cart/count', {
+      const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/cart/count', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartCount(res.data.count);

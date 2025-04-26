@@ -23,7 +23,7 @@ const Header = () => {
 
   const fetchCartItems = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/cart', {
+      const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/cart', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCartItems(res.data.cartItems || []);
@@ -34,7 +34,7 @@ const Header = () => {
 
   const handleDelete = async (itemId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/${itemId}`, {
+      await axios.delete(`https://farmer-marketplace-backend.vercel.app/api/cart/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchCartItems();
@@ -55,7 +55,7 @@ const Header = () => {
     const fetchResults = async (query) => {
       if (!query) return setResults([]);
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/search?q=${query}`, {
+        const res = await axios.get(`https://farmer-marketplace-backend.vercel.app/api/products/search?q=${query}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setResults(res.data.products || res.data);

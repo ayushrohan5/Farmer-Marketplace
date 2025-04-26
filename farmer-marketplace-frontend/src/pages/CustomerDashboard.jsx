@@ -16,7 +16,7 @@ const CustomerDashboard = () => {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/auth/profile', {
+        const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data.user);
@@ -28,7 +28,7 @@ const CustomerDashboard = () => {
     const fetchOrders = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5000/api/payment/my-orders', {
+        const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/payment/my-orders', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const paidOrders = res.data.filter(order => order.status === 'Paid');

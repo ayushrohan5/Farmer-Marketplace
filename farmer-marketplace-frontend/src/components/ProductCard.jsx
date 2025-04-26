@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
 
   const fetchProductQuantity = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/cart', {
+      const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/cart', {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -37,7 +37,7 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     try {
       await axios.post(
-        'http://localhost:5000/api/cart/add',
+        'https://farmer-marketplace-backend.vercel.app/api/cart/add',
         { productId: product._id },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +54,7 @@ const ProductCard = ({ product }) => {
 
   const handleRemoveFromCart = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/remove/${product._id}`, {
+      await axios.delete(`https://farmer-marketplace-backend.vercel.app/api/cart/remove/${product._id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.info('Product removed from cart');
@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
     } else {
       try {
         await axios.put(
-          `http://localhost:5000/api/cart/update`,
+          `https://farmer-marketplace-backend.vercel.app/api/cart/update`,
           {
             productId: product._id,
             action: type,

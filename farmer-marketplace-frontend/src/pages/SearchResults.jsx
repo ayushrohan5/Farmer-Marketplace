@@ -20,7 +20,7 @@ const SearchResults = () => {
       if (!searchTerm) return;
 
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/search?q=${searchTerm}`, {
+        const res = await axios.get(`https://farmer-marketplace-backend.vercel.app/api/products/search?q=${searchTerm}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

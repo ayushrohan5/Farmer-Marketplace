@@ -22,7 +22,7 @@ const CartPage = () => {
 
   const fetchCartItems = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/cart', {
+      const res = await axios.get('https://farmer-marketplace-backend.vercel.app/api/cart', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCartItems(res.data.cartItems || []);
@@ -33,7 +33,7 @@ const CartPage = () => {
 
   const fetchRazorpayKey = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/payment/get-key');
+      const { data } = await axios.get('https://farmer-marketplace-backend.vercel.app/api/payment/get-key');
       setRazorpayKey(data.key);
     } catch (err) {
       console.error('Failed to load Razorpay key', err);
@@ -47,7 +47,7 @@ const CartPage = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/cart/${selectedItemId}`, {
+      await axios.delete(`https://farmer-marketplace-backend.vercel.app/api/cart/${selectedItemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchCartItems();
@@ -84,7 +84,7 @@ const navigate = useNavigate();
   
     try {
       const { data: order } = await axios.post(
-        'http://localhost:5000/api/payment/create-order',
+        'https://farmer-marketplace-backend.vercel.app/api/payment/create-order',
         { amount: totalPrice },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,7 +100,7 @@ const navigate = useNavigate();
           try {
             // First verify the payment
             const verifyRes = await axios.post(
-              'http://localhost:5000/api/payment/verify-payment',
+              'https://farmer-marketplace-backend.vercel.app/api/payment/verify-payment',
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -112,7 +112,7 @@ const navigate = useNavigate();
             if (verifyRes.data.success) {
               // Save order and clear cart in DB
               await axios.post(
-                'http://localhost:5000/api/payment',
+                'https://farmer-marketplace-backend.vercel.app/api/payment',
                 {
                   cartItems,
                   razorpay_order_id: response.razorpay_order_id,
